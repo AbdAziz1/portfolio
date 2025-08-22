@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul Aziz - Data Scientist</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Mobile menu enhancements -->
+    <style>
+        /* Overlay with backdrop blur */
+        .mobile-menu-overlay{
+            position:fixed;
+            inset:0;
+            background:rgba(2,6,23,0.55);
+            backdrop-filter: blur(4px) saturate(120%);
+            opacity:0;
+            visibility:hidden;
+            transition:opacity .25s ease, visibility .25s;
+            /* raised above page but below mobile menu when active */
+            z-index:1300; /* changed from 1000 -> now above nav(1200) */
+        }
+        .mobile-menu-overlay.active{
+            opacity:1;
+            visibility:visible;
+        }
+
+        /* Sliding panel */
+        .mobile-menu{
+            position:fixed;
+            top:0;
+            right:-110%;
+            width:86%;
+            max-width:360px;
+            height:100vh;
+            background:linear-gradient(180deg,#071033 0%, #0b1220 100%);
+            color:#e6f0ff;
+            box-shadow:-28px 0 60px rgba(2,6,23,0.65);
+            padding:20px;
+            transition:right .36s cubic-bezier(.22,.9,.3,1), box-shadow .2s;
+            z-index:1301; /* changed from 1001 -> above nav (1200) and overlay(1300) */
+            display:flex;
+            flex-direction:column;
+        }
+        .mobile-menu.active{
+            right:0;
+        }
+
+        /* When mobile menu is open, push nav under the menu to avoid overlap */
+        body.menu-open nav{
+            z-index:1100; /* lower than mobile menu */
+        }
+
+        /* Profile area inside menu */
+        .mobile-profile-pic{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:14px;
+            border-radius:12px;
+            background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            margin-bottom:12px;
+        }
+        .mobile-profile-pic img{
+            width:56px;
+            height:56px;
+            border-radius:50%;
+            object-fit:cover;
+            box-shadow:0 8px 26px rgba(2,6,23,0.6);
+            border:2px solid rgba(255,255,255,0.06);
+        }
+        .mobile-profile-info .name{ font-weight:700; font-size:1rem; color:#fff; }
+        .mobile-profile-info .role{ font-size:.82rem; color:rgba(230,240,255,0.82); margin-top:2px; }
+
+        /* Close button */
+        .close-menu-btn{
+            position:absolute;
+            top:12px;
+            right:12px;
+            width:44px;
+            height:44px;
+            border-radius:10px;
+            border:none;
+            background:rgba(255,255,255,0.04);
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+            font-size:20px;
+            transition:transform .15s ease, background .15s;
+            z-index:1002;
+        }
+        .close-menu-btn:hover{ transform:scale(1.04); background:rgba(255,255,255,0.06); }
+
+        /* Nav links */
+        .mobile-nav-links{
+            margin-top:8px;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            padding:6px 2px;
+
+            /* remove default list bullets and spacing */
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+        }
+        .mobile-nav-links li{
+            margin:0;
+            padding:0;
+            list-style: none;
+        }
+        .mobile-nav-links a{
+            display:block;
+            padding:12px 14px;
+            border-radius:10px;
+            color:#dbeeff;
+            text-decoration:none;
+            transition:background .16s, transform .16s;
+            font-weight:600;
+        }
+        .mobile-nav-links a:hover{ background:rgba(255,255,255,0.03); transform:translateX(6px); }
+
+        /* Spacer + footer */
+        .mobile-menu .spacer{ flex:1; }
+        .mobile-menu .mobile-footer{
+            display:flex;
+            gap:10px;
+            align-items:center;
+            justify-content:flex-start;
+            padding-top:12px;
+            border-top:1px solid rgba(255,255,255,0.03);
+            margin-top:12px;
+        }
+        .mobile-footer a{ color:#dbeeff; text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding:8px; border-radius:8px; background:rgba(255,255,255,0.015); }
+        .mobile-footer svg{ width:18px; height:18px; fill:currentColor; }
+
+        @media(min-width:769px){
+            .mobile-menu, .mobile-menu-overlay{ display:none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar" class="nav-hidden" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="#home" class="logo" aria-label="Home">
+                <!-- Calligraphic/Aesthetic "A" SVG logo -->
+                <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px;">
+                    <defs>
+                        <linearGradient id="AlogoGradient" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#2563eb"/>
+                            <stop offset="1" stop-color="#a6eb25b1"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="19" cy="19" r="17" stroke="url(#AlogoGradient)" stroke-width="3" fill="none"/>
+                    <path d="M12 27L19 10L26 27" stroke="url(#AlogoGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15.5 21H22.5" stroke="url(#AlogoGradient)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="logo-text"></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <!-- Small profile picture (visible when menu opens) -->
+        <div class="mobile-profile-pic" aria-hidden="false">
+            <img src="1695047690856.jpg" alt="Abdul Aziz" />
+            <div class="mobile-profile-info">
+                <div class="name">Abdul Aziz</div>
+                <div class="role">Data Scientist</div>
+            </div>
+        </div>
+
+        <!-- Close button -->
+        <button class="close-menu-btn" id="closeMenuBtn" aria-label="Close menu">
+            <span>&times;</span>
+        </button>
+
+        <ul class="mobile-nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="spacer" aria-hidden="true"></div>
+
+        <div class="mobile-footer" aria-hidden="false">
+
+            <a href="https://github.com/AbdAziz1" target="_blank" aria-label="GitHub">
+                <!-- GitHub icon -->
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.01c-3.2.7-3.87-1.54-3.87-1.54-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.58.23 2.75.11 3.04.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.27 5.7.42.36.79 1.09.79 2.2v3.26c0 .31.21.67.8.56C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg>
+                GitHub
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-flex">
+            <div class="hero-content">
+                <h1>Abdul Aziz</h1>
+                <p class="subtitle">Data Scientist</p>
+                <!--<p class="description">Transforming complex data into actionable insights through advanced analytics, machine learning, and compelling visualizations.</p>-->
+                <a href="#portfolio" class="cta-button">My Work</a>
+                <a href="resume.pdf" class="cta-button" target="_blank">
+                    Resume <span style="margin-left:6px;" aria-label="Download">&#8595;</span>
+                </a>
+            </div>
+            <div class="hero-image">
+                <img src="1695047690856.jpg" alt="Abdul Aziz" />
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I’m a Data Scientist with a Master’s degree and a strong foundation in analytics, machine learning, and data-driven problem-solving. I thrive on transforming complex data into actionable insights that drive business value, whether through predictive modeling, data storytelling, or building scalable solutions. I’m curious and proactive, always exploring new techniques and tools to deliver better results. Beyond work, I’m passionate about reading, photography, and learning new things.</p>
+
+                    
+                </div>
+                
+                <div class="skills">
+
+                    <div class="skill-card">
+                        <h4>Programming</h4>
+                        <p>Python, R, SQL, C++, HTML, CSS</p>
+                    </div>
+                    <div class="skill-card">
+                        <h4>Visualization</h4>
+                        <p>Tableau, Power BI, Plotly, Seaborn</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <h4>Expertise</h4>
+                        <p>Data Analysis, Predictive & Classification Modeling, Data Visualization & Storytelling, NLP</p>
+                    </div>
+ 
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <h2>Portfolio</h2>
+            
+            <div class="portfolio-categories">
+                <button class="category-btn active" data-category="all">All Projects</button>
+                <button class="category-btn" data-category="ml">Machine Learning</button>
+                <button class="category-btn" data-category="nlp">NLP</button>
+                <button class="category-btn" data-category="viz">Data Visualization</button>
+                <button class="category-btn" data-category="analytics">Analytics</button>
+            </div>
+
+            <div class="projects-grid" id="projects-grid">
+                <!-- ML Projects -->
+
+
+                <!-- NLP Projects -->
+                
+
+
+                <!-- Visualization Projects -->
+
+                <!-- BLINKIT -->
+                <div class="project-card" data-category="viz">
+                    <div id="blinkit-image"></div>
+                    <div class="project-content">
+                        <div class="project-category">Data Visualization</div>
+                        <h3 class="project-title">Blinkit Grocery Sales Dashboard</h3>
+                        <p class="project-description">Built an interactive Power BI dashboard for Blinkit to analyze grocery sales by outlet type, location, and product category. Cleaned and modeled Excel data to reveal insights on revenue trends and customer preferences, enabling better business decisions through dynamic visuals and filters.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Power BI</span>
+                            <span class="tech-tag">DAX</span>
+                            <span class="tech-tag">Excel</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/AbdAziz1/Blinkit-Dashboard" class="project-link", target="_blank">View Code</a>
+                            <a href="https://github.com/AbdAziz1/Blinkit-Dashboard" class="project-link", target="_blank">Live Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+
+                        <!-- NETFLIX -->
+                <div class="project-card" data-category="viz">
+                    <div id="netflix-image">
+                    </div>
+                    <div class="project-content">
+                        <div class="project-category">Data Visualization</div>
+                        <h3 class="project-title">Netflix Dashboard</h3>
+                        <p class="project-description">Developed an interactive, data-driven Tableau dashboard to analyze Netflix’s global content library, including 6,200 movies and 2,600 TV shows up till 2020 data. Designed an intuitive user interface with dynamic filters (Title and Type) to provide users with customizable insights on ratings, genres, and release trends.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Tableau</span>
+                            <span class="tech-tag">Excel</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://public.tableau.com/app/profile/abdul.aziz5955/viz/shared/9FQ72JWNN" class="project-link", target="_blank">Live Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Projects -->
+
+                    <!-- Olympic Game Analysis -->
+                <div class="project-card" data-category="analytics">
+                    <div id="olympic-image"></div>
+                    <div class="project-content">
+                        <div class="project-category">Data Analytics</div>
+                        <h3 class="project-title">Olympic Games Analysis</h3>
+                        <p class="project-description">Performed a comprehensive analysis of Olympic Games historical data to identify trends in athlete participation, medal counts, and gender dynamics. Cleaned and merged multiple datasets, engineered features, and created visualizations to uncover insights about countries’ performance and sport evolution. Developed data-driven plots and interactive analyses to communicate findings effectively.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Streamlit</span>
+                            <span class="tech-tag">Matplotlib</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/AbdAziz1/Olympic-Analysis" class="project-link", target="_blank">View Code</a>
+                            <a href="https://olympic-analysis-vnywddpmvarr6kuqjvuvdt.streamlit.app/" class="project-link", target="_blank">Live Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+
+                                <!-- whatsapp -->
+                <div class="project-card" data-category="analytics">
+                    <div id="whatsapp-image"></div>
+                    <div class="project-content">
+                        <div class="project-category">Natural Language Processing</div>
+                        <h3 class="project-title">WhatsApp Chat Analysis</h3>
+                        <p class="project-description">WhatsApp Chat Analyzer is a powerful tool built with Streamlit, designed to help you analyze your WhatsApp chat data. This project preprocesses chat data and provides detailed insights, including top statistics, activity timelines, most busy users, word clouds, and common words, among other features.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+
+                            <span class="tech-tag">Streamlit</span>
+                            <span class="tech-tag">Matplotlib</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/AbdAziz1/WhatsApp-Chat-Analysis" class="project-link", target="_blank">View Code</a>
+                            <a href="https://whatsapp-chat-analysis-jjjbmsy8covwnernqoswra.streamlit.app/" class="project-link", target="_blank">Live Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+<section id="contact" class="contact">
+    <h2>Get in Touch</h2>
+    <div class="contact-grid">
+        <div class="contact-card">
+            <div class="contact-method">
+                <div class="contact-icon">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <path d="M22 6l-10 7L2 6"/>
+                    </svg>
+                </div>
+                <div class="contact-info">
+                    <h3>Email</h3>
+                    <p>azzizz10301@gmail.com</p>
+                </div>
+            </div>
+            <div class="contact-method">
+                <div class="contact-icon">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                </div>
+                <div class="contact-info">
+                    <h3>Phone</h3>
+                    <p>+92 0345 5174543</p>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/AbdAziz1" class="social-btn" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 .5C5.37.5 0 5.78 0 12.292c0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.725-1.335-1.725-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.803 2.809 1.282 3.495.981.108-.763.417-1.282.76-1.577-2.665-.295-5.466-1.309-5.466-5.827 0-1.287.465-2.339 1.235-3.164-.135-.298-.54-1.497.105-3.121 0 0 1.005-.316 3.3 1.209.96-.262 1.98-.392 3-.398 1.02.006 2.04.136 3 .398 2.28-1.525 3.285-1.209 3.285-1.209.645 1.624.24 2.823.12 3.121.765.825 1.23 1.877 1.23 3.164 0 4.53-2.805 5.527-5.475 5.817.42.354.81 1.077.81 2.182 0 1.578-.015 2.846-.015 3.229 0 .309.21.678.825.56C20.565 21.917 24 17.495 24 12.292 24 5.78 18.627.5 12 .5z"/>
+                    </svg>
+                    GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/abdul-aziz-014869194/" class="social-btn" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 by Abdul Aziz</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // --- NAVBAR: sticky + appear-on-scroll logic ---
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = window.scrollY || 0;
+        const SHOW_THRESHOLD = 60; // px from top to show nav
+
+        function updateNavbarOnScroll() {
+            const currentY = window.scrollY || 0;
+
+            // Add sticky visual when scrolled enough
+            if (currentY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Show nav when user has scrolled past threshold, otherwise hide (unless mobile menu open)
+            if (currentY > SHOW_THRESHOLD) {
+                navbar.classList.remove('nav-hidden');
+                navbar.classList.add('is-sticky');
+            } else {
+                // only hide if mobile menu is not open
+                if (!document.body.classList.contains('menu-open')) {
+                    navbar.classList.add('nav-hidden');
+                }
+                navbar.classList.remove('is-sticky');
+            }
+
+            lastScrollY = currentY <= 0 ? 0 : currentY;
+        }
+
+        // Initialize on load (so nav hides at top)
+        updateNavbarOnScroll();
+
+        // Use passive listener for better performance on scroll
+        window.addEventListener('scroll', updateNavbarOnScroll, { passive: true });
+
+        // --- existing section-highlighting logic (kept) ---
+        // Update active navigation link based on current section
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a, .mobile-nav-links a');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+
+        // Toggle mobile menu (open/close)
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const opening = !mobileMenu.classList.contains('active');
+                mobileMenu.classList.toggle('active', opening);
+                mobileMenuOverlay.classList.toggle('active', opening);
+                document.body.classList.toggle('menu-open', opening);
+                document.body.style.overflow = opening ? 'hidden' : '';
+                mobileMenuBtn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+
+                // toggle the icon animation state
+                mobileMenuBtn.classList.toggle('active', opening);
+
+                // ensure nav is visible while mobile menu is open
+                if (opening) {
+                    navbar.classList.remove('nav-hidden');
+                    navbar.classList.add('is-sticky');
+                } else {
+                    // restore hide state at top if needed
+                    if (window.scrollY <= SHOW_THRESHOLD) {
+                        navbar.classList.add('nav-hidden');
+                        navbar.classList.remove('is-sticky');
+                    }
+                }
+            });
+        }
+
+        // Close mobile menu when clicking overlay
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        }
+
+        // Close mobile menu when clicking nav link
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+
+        // Close mobile menu when clicking close button
+        if (closeMenuBtn) {
+            closeMenuBtn.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        }
+
+        // Function to close mobile menu
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            document.body.style.overflow = '';
+            if (mobileMenuBtn) {
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                mobileMenuBtn.classList.remove('active');
+            }
+            // restore nav hide if at top
+            if (window.scrollY <= SHOW_THRESHOLD) {
+                navbar.classList.add('nav-hidden');
+                navbar.classList.remove('is-sticky');
+            }
+        }
+
+        // Close mobile menu on window resize (larger screens)
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+
+        // Portfolio filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const category = btn.getAttribute('data-category');
+                
+                // Filter projects
+                projectCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeInUp 0.6s ease forwards';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all project cards
+        projectCards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
