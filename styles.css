@@ -224,7 +224,7 @@ h2{ font-size:2.1rem; color: #e6f0ff; margin-bottom:2rem; text-align:center; }
 .project-card:hover{ transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 80px rgba(2,6,23,0.6); }
 
 /* project image blocks */
-#blinkit-image, #netflix-image, #whatsapp-image, #olympic-image, #movierecommend-image, #weather-image{
+#blinkit-image, #netflix-image, #whatsapp-image, #olympic-image, #movierecommend-image, #weather-image, #gym-image{
     height:190px; background-size:cover; background-position:center; filter:contrast(0.98) saturate(1.05);
 }
 #blinkit-image{ background-image: url("blinkit.png"); }
@@ -233,6 +233,8 @@ h2{ font-size:2.1rem; color: #e6f0ff; margin-bottom:2rem; text-align:center; }
 #olympic-image{ background-image: url("900px-Olympic_flag.svg_.webp"); }
 #movierecommend-image{ background-image: url("movierecommend.png"); }
 #weather-image{ background-image: url("weather.png"); }
+#gym-image{ background-image: url("gym.png"); }
+
 
 
 /* project content */
@@ -412,4 +414,5 @@ footer{
 
 
 footer p{ margin: 0; }
+
 
